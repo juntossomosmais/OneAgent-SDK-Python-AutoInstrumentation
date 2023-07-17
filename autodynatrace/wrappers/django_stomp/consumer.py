@@ -1,10 +1,10 @@
 import oneagent
-from ...log import logger
-from ...sdk import sdk
 from django.conf import settings
 from django.utils.module_loading import import_string
 from django_stomp import execution
-
+from ...log import logger
+from ...sdk import sdk
+from .utils import get_messaging_type_by_queue_name
 
 def instrument_consumer():
     def wrapped_import_string(dotted_path):
@@ -26,7 +26,7 @@ def instrument_consumer():
             messaging_system = sdk.create_messaging_system_info(
                 oneagent.common.MessagingVendor.RABBIT_MQ,
                 destination,
-                oneagent.common.MessagingDestinationType.QUEUE,
+                get_messaging_type_by_queue_name(destination),
                 oneagent.sdk.Channel(oneagent.sdk.ChannelType.TCP_IP, "{}:{}".format(host, port)),
             )
 

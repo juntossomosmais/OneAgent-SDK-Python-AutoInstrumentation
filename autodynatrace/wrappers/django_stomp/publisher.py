@@ -1,10 +1,10 @@
 import oneagent
 import wrapt
-from ...log import logger
-from ...sdk import sdk
 from django.conf import settings
 from django_stomp.services.producer import Publisher
-
+from ...log import logger
+from ...sdk import sdk
+from .utils import get_messaging_type_by_queue_name
 
 def instrument_publisher():
     def on_send_message(wrapped, instance, args, kwargs):
@@ -20,7 +20,7 @@ def instrument_publisher():
         messaging_system = sdk.create_messaging_system_info(
             oneagent.common.MessagingVendor.RABBIT_MQ,
             destination,
-            oneagent.common.MessagingDestinationType.QUEUE,
+            get_messaging_type_by_queue_name(destination),
             oneagent.sdk.Channel(oneagent.sdk.ChannelType.TCP_IP, "{}:{}".format(host, port)),
         )
 
