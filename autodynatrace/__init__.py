@@ -54,7 +54,7 @@ INSTRUMENT_LIBS = {
     "starlette": True,
     "aiohttp": True,
     "bottle": True,
-    "django_stomp": True,
+    "django_outbox_pattern": True,
 }
 
 

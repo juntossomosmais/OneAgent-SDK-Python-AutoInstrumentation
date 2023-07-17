@@ -1,7 +1,7 @@
 import oneagent
-from django.conf import settings
+from django_outbox_pattern.settings import settings
 from django.utils.module_loading import import_string
-from django_stomp import execution
+from django_outbox_pattern.management.commands import subscribe
 from ...log import logger
 from ...sdk import sdk
 from .utils import get_messaging_type_by_queue_name
@@ -13,8 +13,8 @@ def instrument_consumer():
         def instrumented_callback(payload):
             try:
                 headers = payload.headers
-                host, port = settings.STOMP_SERVER_HOST, settings.STOMP_SERVER_PORT
-                destination = headers.get("tshoot-destination")
+                host, port = settings.DEFAULT_STOMP_HOST_AND_PORTS
+                destination = headers.get("destination")
             except Exception as e:
                 logger.warn("autodynatrace - Could not trace Consumer(import_string): {}".format(e))
                 return callback_function(payload)
@@ -43,4 +43,4 @@ def instrument_consumer():
 
         return instrumented_callback
 
-    setattr(execution, "import_string", wrapped_import_string)
+    setattr(subscribe, "_import_from_string", wrapped_import_string)

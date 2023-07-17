@@ -1,7 +1,7 @@
 import oneagent
 import wrapt
-from django.conf import settings
-from django_stomp.services.producer import Publisher
+from django_outbox_pattern.settings import settings
+from django_outbox_pattern.producers import Producer
 from ...log import logger
 from ...sdk import sdk
 from .utils import get_messaging_type_by_queue_name
@@ -9,7 +9,7 @@ from .utils import get_messaging_type_by_queue_name
 def instrument_publisher():
     def on_send_message(wrapped, instance, args, kwargs):
         try:
-            host, port = settings.STOMP_SERVER_HOST, settings.STOMP_SERVER_PORT
+            host, port = settings.DEFAULT_STOMP_HOST_AND_PORTS
             destination = kwargs.get("queue")
             headers = kwargs.get("headers", {})
 
@@ -35,4 +35,4 @@ def instrument_publisher():
                 )
                 return wrapped(*args, **kwargs)
 
-    wrapt.wrap_function_wrapper(Publisher, "send", on_send_message)
+    wrapt.wrap_function_wrapper(Producer, "send", on_send_message)
