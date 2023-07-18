@@ -60,6 +60,7 @@ For Django, add `"autodynatrace.wrappers.django"` to `INSTALLED_APPS`
 
 * `AUTODYNATRACE_CAPTURE_HEADERS`: Default: `False`, set to `True` to capture request headers
 * `AUTODYNATRACE_LOG_LEVEL`: Default `WARNING`
+* `AUTODYNATRACE_AUTOMATIC_LOG_CORRELATION`: Default `False`, set to `True` to enrich logs with trace_id and span_id
 * `AUTODYNATRACE_FORKABLE`: Default `False`, set to `True` to [instrument forked processes](https://github.com/Dynatrace/OneAgent-SDK-for-Python#using-the-oneagent-sdk-for-python-with-forked-child-processes-only-available-on-linux). Use this for gunicorn/uwsgi
 * `AUTODYNATRACE_VIRTUAL_HOST`: Overwrite the default Virtual Host for web frameworks
 * `AUTODYNATRACE_APPLICATION_ID`: Overwrite the default Application Name for web frameworks
