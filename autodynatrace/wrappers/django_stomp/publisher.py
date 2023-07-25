@@ -24,11 +24,13 @@ def instrument_publisher():
             oneagent.sdk.Channel(oneagent.sdk.ChannelType.TCP_IP, "{}:{}".format(host, port)),
         )
 
+        tag = headers.get(oneagent.common.DYNATRACE_MESSAGE_PROPERTY_NAME, None)
         with messaging_system:
             with sdk.trace_outgoing_message(messaging_system) as outgoing_message:
                 outgoing_message.set_correlation_id(headers.get("correlation-id"))
-                tag = outgoing_message.outgoing_dynatrace_string_tag.decode("utf-8")
-                headers[oneagent.common.DYNATRACE_MESSAGE_PROPERTY_NAME] = tag
+                if not tag:
+                    tag = outgoing_message.outgoing_dynatrace_string_tag.decode("utf-8")
+                    headers[oneagent.common.DYNATRACE_MESSAGE_PROPERTY_NAME] = tag
                 logger.debug(
                     f"autodynatrace - Tracing Outgoing RabbitMQ host={host}, port={port}, routing_key={destination}, "
                     f"tag={tag}, headers={headers}"
