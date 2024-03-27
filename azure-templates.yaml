@@ -1,0 +1,24 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - autodynatrace
+      - poetry.lock
+      - pyproject.toml
+pr:
+  - main
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: juntossomosmais/azure-pipelines-templates
+      endpoint: github.com
+      ref: main
+
+extends:
+  template: python/library.yaml@templates
+  parameters:
+    PublishToArtifacts: true
